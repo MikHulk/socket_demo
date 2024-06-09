@@ -12,6 +12,7 @@ if logging_conf:
 
 log = logging.getLogger("arithmeticServer")
 
+# default logging configuration
 if not logging_conf:
     ch = logging.StreamHandler()
     log.setLevel(logging.DEBUG)
@@ -21,7 +22,7 @@ if not logging_conf:
     log.addHandler(ch)
 
 
-class MyTCPHandler(socketserver.BaseRequestHandler):
+class ArithmeticTCPHandler(socketserver.BaseRequestHandler):
     """
     The request handler class for the arithmetic server.
 
@@ -80,5 +81,5 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
 
-    with socketserver.ForkingTCPServer((HOST, PORT), MyTCPHandler) as server:
+    with socketserver.ForkingTCPServer((host, port), ArithmeticTCPHandler) as server:
         server.serve_forever()
