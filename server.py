@@ -79,7 +79,8 @@ class ArithmeticTCPHandler(socketserver.BaseRequestHandler):
 
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 9999
+    host = os.environ.get("SERVER_LISTEN_ADDRESS", "localhost")
+    port = int(os.environ.get("SERVER_PORT", 9999))
 
     with socketserver.ForkingTCPServer((host, port), ArithmeticTCPHandler) as server:
         server.serve_forever()

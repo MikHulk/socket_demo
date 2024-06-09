@@ -42,4 +42,4 @@ if __name__ == "__main__":
                     data = result.decode("ascii")
                     log.debug("receive: %s", data)
                     out.write(data)
-                    out.write('\n')
+                    out.write("\n")
