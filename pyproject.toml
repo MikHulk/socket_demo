@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "socket-demo"
+name = "mathserver"
 version = "0.1.0"
 description = "using socket with Python"
 authors = ["MV <m.viey@wanadoo.fr>"]
@@ -8,6 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+
+[tool.poetry.scripts]
+server = "mathserver.server:main"
+client = "mathserver.client:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"

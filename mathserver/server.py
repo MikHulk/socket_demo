@@ -4,7 +4,7 @@ import os
 import signal
 import socketserver
 
-from lib.parser import parse_string, MalformedExpression, InvalidToken
+from mathserver.lib.parser import parse_string, MalformedExpression, InvalidToken
 
 
 logging_conf = os.environ.get("SERVER_LOGGING_CONF")
@@ -52,7 +52,7 @@ class ArithmeticTCPHandler(socketserver.BaseRequestHandler):
         while True:
             msg = self.from_parent.readline()
             try:
-                msg = msg.decode('ascii')
+                msg = msg.decode("ascii")
             except UnicodeDecodeError:
                 log.debug("{} got decoding error".format(self.client_address[0]))
                 self.to_parent.write("error: decoding error\n".encode("ascii"))
@@ -71,18 +71,19 @@ class ArithmeticTCPHandler(socketserver.BaseRequestHandler):
                 self.to_parent.write(f"error: {str(err)}\n".encode("ascii"))
             else:
                 result = expr.result
-                log.debug("{}: {} = {}".format(self.client_address[0], msg.strip(), result))
+                log.debug(
+                    "{}: {} = {}".format(self.client_address[0], msg.strip(), result)
+                )
                 self.to_parent.write(str(result).encode("ascii"))
-                self.to_parent.write(b'\n')
-            
+                self.to_parent.write(b"\n")
 
     def handle(self):
         r, w = os.pipe()
-        self.from_worker = os.fdopen(r, 'rb', 0)
-        self.to_parent = os.fdopen(w, 'wb', 0)
+        self.from_worker = os.fdopen(r, "rb", 0)
+        self.to_parent = os.fdopen(w, "wb", 0)
         r, w = os.pipe()
-        self.from_parent = os.fdopen(r, 'rb', 0)
-        self.to_worker = os.fdopen(w, 'wb', 0)
+        self.from_parent = os.fdopen(r, "rb", 0)
+        self.to_worker = os.fdopen(w, "wb", 0)
         child_pid = os.fork()
         if not child_pid:
             self.wait_for_expression()
@@ -102,14 +103,18 @@ class ArithmeticTCPHandler(socketserver.BaseRequestHandler):
                 )
             )
             self.to_worker.write(data)
-            self.to_worker.write(b'\n')
+            self.to_worker.write(b"\n")
             result = self.from_worker.readline().strip()
             self.request.sendall(result)
 
 
-if __name__ == "__main__":
+def main():
     host = os.environ.get("SERVER_LISTEN_ADDRESS", "localhost")
     port = int(os.environ.get("SERVER_PORT", 9999))
 
     with socketserver.ForkingTCPServer((host, port), ArithmeticTCPHandler) as server:
         server.serve_forever()
+
+
+if __name__ == "__main__":
+    main()

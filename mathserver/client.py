@@ -28,7 +28,8 @@ parser.add_argument("port", type=int)
 parser.add_argument("input_file")
 parser.add_argument("output_file")
 
-if __name__ == "__main__":
+
+def main():
     args = parser.parse_args()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((args.host, args.port))
@@ -43,3 +44,7 @@ if __name__ == "__main__":
                     log.debug("receive: %s", data)
                     out.write(data)
                     out.write("\n")
+
+
+if __name__ == "__main__":
+    main()
