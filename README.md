@@ -33,7 +33,7 @@ The client can be runned with:
 
 ```
 $ poetry run client --help
-usage: Arithmetic client [-h] host port input_file output_file
+usage: Arithmetic client [-h] [--burst BURST] host port input_file output_file
 
 A client for the arithmetic server
 
@@ -44,7 +44,8 @@ positional arguments:
   output_file
 
 options:
-  -h, --help   show this help message and exit
+  -h, --help     show this help message and exit
+  --burst BURST  how many concurrent query you want
 ```
 
 By example if the server is listening on `localhost:9000` one can run:
@@ -54,6 +55,12 @@ poetry run client localhost 9999 operations.txt result.txt
 ```
 
 The script will read operations from `operations.txt` and write their results in `result.txt`.
+
+The burst option (which default to 1) allows you to open several sockets at the same time, 
+enabling you to carry out several requests simultaneously on the server while maintaining 
+the order of operations. A reasonable number can divide execution time by 2. Of course, this
+depends on a number of factors, such as the number of core on the server and client, and the 
+number of sockets authorized by the system.
 
 
 # Develop
